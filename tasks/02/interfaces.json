@@ -1,0 +1,26 @@
+[
+  {
+    "interface": "GigabitEthernet1/0/1",
+    "description": "LAN",
+    "ip_address": "10.0.0.0",
+    "subnet_mask": "255.255.255.0",
+    "enabled": false,
+    "speed": "1000",
+    "duplex": "full"
+  },
+  {
+    "interface": "loopback0",
+    "description": "Router ID",
+    "ip_address": "1.1.1.1",
+    "subnet_mask": "255.255.255.255",
+    "enabled": true
+  },
+  {
+    "interface": "TenGigabitEthernet0/0/0",
+    "description": "WAN",
+    "ip_address": "3.123.45.129",
+    "subnet_mask": "255.255.255.252",
+    "enabled": true,
+    "speed": "10000"
+  }
+]

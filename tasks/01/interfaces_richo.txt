@@ -1,0 +1,22 @@
+
+interface GigabitEthernet1/0/1
+  description LAN
+  ip address 10.0.0.0 255.255.255.0
+  speed 1000
+  duplex full
+  no shutdown
+!
+interface loopback0
+  description Router ID
+  ip address 1.1.1.1 255.255.255.255
+  speed 1000
+  duplex full
+  no shutdown
+!
+interface TenGigabitEthernet0/0/0
+  description WAN
+  ip address 3.123.45.129 255.255.255.252
+  speed 10000
+  duplex full
+  no shutdown
+!
