@@ -1,7 +1,12 @@
 import json
+from netmiko import ConnectHandler
 
-devices = {"R1": "192.168.1.10", 
-           "R2": "192.168.1.20"}
+devices = {
+           'device_type': 'cisco_ios',
+           'R1': '192.168.1.10', 
+           'R2': '192.168.1.20',
+           'username': 'cisco',
+           'password': 'cisco',}
 
 def open_file():
     with open("interfaces.json", "r") as data:
@@ -21,14 +26,24 @@ def render_config(interface):
 
         return interface_template
 
-def push_config(interface, ip):
-    print("Seding command to" + ip)
+def push_config(interface, hostname):
+    print("Seding command to " + hostname + " (" + devices[hostname] + "):")
     int_config = []
     for all_int in interface:
         int_config = render_config(all_int)
-        print(int_config)
-   
+        """with ConnectHandler(**device) as ssh:
+            ssh.enable()
+            send_command = ssh.send_config_set(int_config)
+            print(send_command)"""
+        print(int_config)        
+
+
+def main():
+    data = open_file()
+    for hostname in devices.keys():
+        push_config(data, hostname)
+
 
 if __name__ == "__main__":
-   data = open_file()
-   push_config(data, devices["R1"])
+   main()
+       
