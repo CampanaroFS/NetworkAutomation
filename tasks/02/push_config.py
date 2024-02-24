@@ -1,5 +1,5 @@
 import json
-from jinja2 import Template, Environment, FileSystemLoader
+from jinja2 import Template
 
 def get_jsonfile():
     with open('interfaces.json', 'r') as file:
