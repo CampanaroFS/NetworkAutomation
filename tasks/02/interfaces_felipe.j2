@@ -1,20 +1,23 @@
-{% for interface in interfaces %}
+{% for interface in interfaces -%}
 interface {{ interface.interface }}
 description {{ interface.description }}
 ip address {{ interface.ip_address }} {{ interface.subnet_mask }}
-{% if interface.enabled %}
+{% if interface.enabled -%}
 no shutdown
-{% else %}
+{% else -%}
 shutdown
-{% endif %}
-{% if 'gigabit' in interface.interface.lower() %}
+{% endif -%}
+{% if 'tenGigabitEthernet' in interface.interface.lower() -%}
+speed 10000
+{% elif 'gigabit' in interface.interface.lower()  -%}
 speed 1000
-{% else %}
+{% else -%}
 speed 100
 {% endif %}
-{% if interface.duplex %}
+{%- if interface.duplex -%}
 duplex {{ interface.duplex }}
-{% else %}
+{%- else -%}
 duplex auto
-{% endif %}
+{%- endif %}
+!
 {% endfor %}
