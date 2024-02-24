@@ -7,9 +7,9 @@ no shutdown
 {% else -%}
 shutdown
 {% endif -%}
-{% if 'tenGigabitEthernet' in interface.interface.lower() -%}
+{% if 'tengigabitethernet' in interface.interface.lower() -%}
 speed 10000
-{% elif 'gigabit' in interface.interface.lower()  -%}
+{% elif 'gigabitethernet' in interface.interface.lower()  -%}
 speed 1000
 {% else -%}
 speed 100
