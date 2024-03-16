@@ -58,6 +58,12 @@ $ python cli.py -i GigabitEthernet1/0/1 -d LAN -ip 10.0.0.0/24 -e -s 1000 -dp fu
 
 We will be using FastAPI to create a simple API to use it instead of the CLI. The idea is to have a simple API that will ask for the information and based on that render the configuration. We can use the same jinja2 template as before and we can either return the redered configuration or write it to a file.
 
+Command to run the API:
+
+```bash
+uvicorn richo_api:app --reload
+```
+
 ## 3 Push the interface config to a device using SSH
 
 ## 4 Push the interface config to a device using RESTCONF

@@ -1,3 +1,6 @@
 jinja2
 typer
 napalm
+rich
+fastapi
+uvicorn
