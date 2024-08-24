@@ -17,11 +17,12 @@ def render_interface(interface_data, template):
 
 
 @app.command()
-def goodbye(int: str, desc: str, ip: str, speed: int = 1000, duplex: str = "full", enabled: bool = True):
+def goodbye(int: str, desc: str, ip: str, prefix: str, speed: int = 1000, duplex: str = "full", enabled: bool = True):
     interface = {
         "interface": int,
         "description": desc,
         "ip_address": ip,
+        "subnet_mask": prefix,
         "enabled": enabled,
         "speed": speed,
         "duplex": duplex

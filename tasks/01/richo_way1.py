@@ -8,12 +8,12 @@ def open_json_file():
 def render_interface(interface_data):
 
     interface_template = f"""
-interface {interface_data["interface"]}
-  description {interface_data["description"]}
-  ip address {interface_data["ip_address"]} {interface_data["subnet_mask"]}
-  speed {interface_data["speed"]}
-  duplex {interface_data["duplex"]}
-  {interface_data["shut_down"]}"""
+    interface {interface_data["interface"]}
+    description {interface_data["description"]}
+    ip address {interface_data["ip_address"]} {interface_data["subnet_mask"]}
+    speed {interface_data["speed"]}
+    duplex {interface_data["duplex"]}
+    {interface_data["shut_down"]}"""
     
     return interface_template
 

@@ -18,7 +18,7 @@ class Interface(BaseModel):
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return {"Network": "Automation World"}
 
 
 @app.get("/interfaces")
@@ -38,7 +38,7 @@ def read_item(int_id: str):
     return {"error": "Interface not found"}
 
 
-@app.post("/interfaces")
+@app.post("/interfaces/post")
 def create_item(interface: Interface):
     with open("interfaces.json", "r") as file:
         interfaces = json.load(file)
@@ -51,12 +51,20 @@ def create_item(interface: Interface):
     return interface
 
 
-# @app.put("/interfaces/{int_id}")  # TODO by Felipe
-# def update_item(int_id: str, interface: Interface):
-#     with open("interfaces.json", "r") as file:
-#         interfaces = json.load(file)
+@app.put("/interfaces/{int_id}")  # TODO by Felipe
+def replace_item(int_id: str, interface: Interface):
+    with open("interfaces.json", "r") as file:
+        interfaces = json.load(file)
 
-#     raise None
+    for i, inter in enumerate(interfaces):
+        if inter["id"] == int_id:
+            interfaces[i] = interface
+            break
+
+    with open("interfaces.json", "w") as file:
+        json.dump(interfaces, file)
+    
+    return {"message": "Interface replaced successfully"}
 
 
 @app.delete("/interfaces/{int_id}")
