@@ -1,0 +1,50 @@
+hostname {{ hostname }}
+ip domain-name {{ domain }}
+enable secret {{ enable_secret }}
+username {{ username }} privilege 15 secret {{ secret }}
+crypto key generate rsa {{ rsa_key_size }}
+ip ssh version 2
+line vty 0 4
+ login local
+ transport input ssh
+ exit
+
+{% for interface in interfaces -%}
+interface {{ interface.name }}
+ description {{ interface.description }}
+ {% if interface.switchport -%} 
+    switchport mode trunk
+ {% else -%}
+    switchport mode access
+ {% endif -%}
+ ip address {{ interface.ip }} {{ interface.subnet_mask }}
+ {% if interface.enabled -%}
+    no shutdown
+ {% else -%}
+    shutdown
+ {% endif -%}
+ speed {{ interface.speed }}
+ duplex {{ interface.duplex }}
+ exit
+{% endfor -%}
+
+router bgp {{ bgp_as }}
+
+{{% if router-id -%}}
+    bgp router-id {{ router-id }}
+{{% endif -%}
+
+{{% for neighbor in neigbors -% }}
+    neighbor {{ neighbor.neighbor }} remote-as {{ neighbor.remote-as }}
+{{% if neigbor.next-hop-self %}}
+    neighbor {{ neigbor.neigbor }} next-hop-self
+{{% endif %}}
+{{% for route in route-map %}}
+    neighbor {{ neigbor.neigbor }} route-map {{ route.route-map }}
+{{% endfor %}}
+
+
+
+
+end
+write memory
