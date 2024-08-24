@@ -24,10 +24,10 @@ interfaces:
 	duplex: auto
 	speed: auto
     enabled: no shut
+    
 
-router bgp 100
- bgp log-neighbor-changes
- neighbor 10.10.12.2 remote-as 100
+bgp_as: 100
+ neighbor: 10.10.12.2 remote-as: 100
  neighbor 10.10.12.2 next-hop-self
  neighbor 10.10.13.3 remote-as 30
  neighbor 10.10.13.3 route-map Peer-R3 in
