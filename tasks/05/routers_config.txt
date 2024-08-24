@@ -1,0 +1,56 @@
+hostname: R1
+
+domain: example.com
+enable_secret: cisco
+username: admin 
+secret: cisco
+
+interfaces:
+ Loopback0:
+	description: RID	 
+	ip address: 192.168.1.1 255.255.255.255
+    enabled: no shut
+
+ GigabitEthernet0/0
+	description: Connected to R2 
+	ip address: 10.10.12.1 255.255.255.0
+ 	duplex: auto
+ 	speed: auto
+    no shut
+
+ GigabitEthernet0/1
+	description: Connected to R1 	
+	ip address: 10.10.13.1 255.255.255.0
+	duplex: auto
+	speed: auto
+    enabled: no shut
+
+router bgp 100
+ bgp log-neighbor-changes
+ neighbor 10.10.12.2 remote-as 100
+ neighbor 10.10.12.2 next-hop-self
+ neighbor 10.10.13.3 remote-as 30
+ neighbor 10.10.13.3 route-map Peer-R3 in
+
+ip bgp-community new-format
+ip community-list 1 permit 100:300
+ip community-list 2 permit 100:250
+
+ip route 0.0.0.0 0.0.0.0 10.10.13.3
+ip ssh version 2
+
+route-map Peer-R3 permit 10
+ match community 1
+ set local-preference 130
+
+route-map Peer-R3 permit 20
+ match community 2
+ set local-preference 125
+
+route-map Peer-R3 permit 30
+
+line vty 0 4
+ login local
+ transport input ssh
+
+end
