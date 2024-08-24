@@ -1,0 +1,43 @@
+hostname R1
+
+ip domain-name example.com
+enable secret cisco
+username cisco privilege 15 secret cisco
+crypto key generate rsa 2048
+ip ssh version 2
+line vty 0 4
+ login local
+ transport input ssh
+ exit
+
+interface GigabitEthernet0/0
+ description Connected to R2
+ switchport mode access
+ ip address 10.0.0.0 255.255.255.0
+ no shutdown
+ speed 1000
+ duplex full
+exit
+interface GigabitEthernet0/1
+ description Connected to R2
+ 
+ switchport mode trunk
+ ip address 10.0.0.0 255.255.255.0
+ no shutdown
+ speed 1000
+ duplex full
+exit
+
+router bgp 65534
+ bgp router-id 10.1.1.1
+ neighbor 1.1.1.1 remote-as 65534
+ neighbor 1.1.1.1 next-hop-self
+ neighbor 1.1.1.1 route-map OUT out
+ neighbor 1.1.1.1 route-map IN in
+ neighbor 1.1.1.2 remote-as 65534
+ neighbor 1.1.1.2 next-hop-self
+ neighbor 1.1.1.2 route-map OUT out
+ neighbor 1.1.1.2 route-map IN in
+
+end
+write memory
