@@ -5,33 +5,144 @@
   interfaces:
     - name: GigabitEthernet0/0
       description: Connected to R2 
-      switchport: false
-      ip: 10.0.0.0
+      ip: 10.10.12.1
       mask: 255.255.255.0
       enabled: true
       speed: 1000
       duplex: full
     - name: GigabitEthernet0/1
-      description: Connected to R2 
-      switchport: true
-      ip: 10.0.0.0
+      description: Connected to R3 
+      ip: 10.10.13.1
       mask: 255.255.255.0
       enabled: true
       speed: 1000
       duplex: full
+    - name: Loopback0
+      description: RID 
+      switchport: false
+      ip: 192.168.1.1
+      mask: 255.255.255.255
+      enabled: true
+      speed: 1000
+      duplex: full
   bgp:
-    as: 65534
-    router_id: 10.1.1.1
+    as: 100
+    router_id: 192.168.1.1
     neighbors:
-      - neighbor: 1.1.1.1 
-        remote_as: 65534
+      - neighbor: 10.10.12.2
+        remote_as: 100
         description: R2
         next_hop_self: true
-        route_map_out: OUT
-        route_map_in: IN
-      - neighbor: 1.1.1.2
-        remote_as: 65534
-        description: R2
+        send_community: false
+        route_map_out: false
+        route_map_in: false
+      - neighbor: 10.10.13.3
+        remote_as: 30
+        description: R3
         next_hop_self: true
-        route_map_out: OUT
-        route_map_in: IN
+        send_community: false
+        route_map_out: false
+        route_map_in: true
+- hostname: R2
+  enable_secret: cisco
+  username: cisco
+  secret: cisco
+  interfaces:
+    - name: GigabitEthernet0/0
+      description: Connected to R1 
+      ip: 10.10.12.2
+      mask: 255.255.255.0
+      enabled: true
+      speed: 1000
+      duplex: full
+    - name: GigabitEthernet0/2
+      description: Connected to R3 
+      ip: 10.10.23.2
+      mask: 255.255.255.0
+      enabled: true
+      speed: 1000
+      duplex: full
+    - name: Loopback0
+      description: RID
+      ip: 192.168.2.2
+      mask: 255.255.255.255
+      enabled: true
+      speed: 1000
+      duplex: full
+  bgp:
+    as: 100
+    router_id: 192.168.2.2
+    neighbors:
+      - neighbor: 10.10.12.1
+        remote_as: 100
+        description: R1
+        next_hop_self: true
+        send_community: false
+        route_map_out: false
+        route_map_in: false
+      - neighbor: 10.10.23.3
+        remote_as: 30
+        description: R3
+        next_hop_self: true
+        send_community: false
+        route_map_out: false
+        route_map_in: true
+
+- hostname: R3
+  enable_secret: cisco
+  username: cisco
+  secret: cisco
+  interfaces:
+    - name: GigabitEthernet0/0
+      description: Stub Network 
+      ip: 10.0.10.3
+      mask: 255.255.255.0
+      enabled: true
+      speed: 1000
+      duplex: full
+    - name: GigabitEthernet0/1
+      description: Connected to R1 
+      ip: 10.10.13.3
+      mask: 255.255.255.0
+      enabled: true
+      speed: 1000
+      duplex: full
+    - name: GigabitEthernet0/2
+      description: Connected to R2 
+      ip: 10.10.23.3
+      mask: 255.255.255.0
+      enabled: true
+      speed: 1000
+      duplex: full
+    - name: GigabitEthernet0/3
+      description: Stub Network 
+      ip: 10.1.0.3
+      mask: 255.255.255.0
+      enabled: true
+      speed: 1000
+      duplex: full
+    - name: Loopback0
+      description: RID
+      ip: 192.168.3.3
+      mask: 255.255.255.255
+      enabled: true
+      speed: 1000
+      duplex: full
+  bgp:
+    as: 100
+    router_id: 192.168.2.2
+    neighbors:
+      - neighbor: 10.10.12.1
+        remote_as: 100
+        description: R1
+        next_hop_self: true
+        send_community: true
+        route_map_out: true
+        route_map_in: false
+      - neighbor: 10.10.23.3
+        remote_as: 30
+        description: R3
+        next_hop_self: true
+        send_community: true
+        route_map_out: true
+        route_map_in: false

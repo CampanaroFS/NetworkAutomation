@@ -1,0 +1,82 @@
+conf t
+hostname R3
+ip domain-name example.com
+enable secret cisco
+username cisco privilege 15 secret cisco
+crypto key generate rsa 2048
+ip ssh version 2
+line vty 0 4
+ login local
+ transport input ssh
+ exit
+interface GigabitEthernet0/0
+ description Stub Network
+ ip address 10.0.10.3 255.255.255.0
+ no shutdown
+ speed 1000
+ duplex full
+exit
+interface GigabitEthernet0/1
+ description Connected to R1
+ ip address 10.10.13.3 255.255.255.0
+ no shutdown
+ speed 1000
+ duplex full
+exit
+interface GigabitEthernet0/2
+ description Connected to R2
+ ip address 10.10.23.3 255.255.255.0
+ no shutdown
+ speed 1000
+ duplex full
+exit
+interface GigabitEthernet0/3
+ description Stub Network
+ ip address 10.1.0.3 255.255.255.0
+ no shutdown
+ speed 1000
+ duplex full
+exit
+interface Loopback0
+ description RID
+ ip address 192.168.3.3 255.255.255.255
+ no shutdown
+exit
+
+ip bgp-community new-format
+
+router bgp 100
+ bgp router-id 192.168.2.2
+ neighbor 10.10.12.1 remote-as 100
+ neighbor 10.10.12.1 next-hop-self
+ neighbor 10.10.12.1 send_community
+ neighbor 10.10.12.1 route-map route_map_out_to_R1 out
+ neighbor 10.10.12.1 route-map route_map_out_to_R2 out
+ neighbor 10.10.23.3 remote-as 30
+ neighbor 10.10.23.3 next-hop-self
+ neighbor 10.10.23.3 send_community
+ neighbor 10.10.23.3 route-map route_map_out_to_R1 out
+ neighbor 10.10.23.3 route-map route_map_out_to_R2 out
+end
+
+
+ access-list 101 permit ip host 10.0.10.0 host 255.255.255.0
+ access-list 102 permit ip host 10.1.0.0 host 255.255.255.0
+ route-map Peer_R1 permit 10
+ match ip address 101
+ set communit 100:300
+ exit
+ route-map Peer_R1 permit 20
+ match ip address 102
+ set communit 100:250
+ exit
+route-map Peer_R2 permit 10
+ match ip address 101
+ set communit 100:250
+ exit
+ route-map Peer_R2 permit 20
+ match ip address 102
+ set communit 100:300
+ exit
+end
+write memory

@@ -1,6 +1,6 @@
 import yaml
 from rich import print
-# from netmiko import ConnectHandler
+from netmiko import ConnectHandler
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
 def open_yaml_file():
@@ -24,16 +24,16 @@ def write_to_file(text, filename):
     with open(f"{filename}.txt", 'w') as f:
         f.write(text)
 
-# def send_ssh_commands(commands):
-#     device = {
-#         'device_type': 'cisco_ios',
-#         'host': '192.168.1.',
-#         'username': 'admin',
-#         'password': 'cisco'
-#     }
-#     connection = ConnectHandler(**device)
-#     output = connection.send_command(commands)
-#     print(output)
+def send_ssh_commands(commands):
+    device = {
+        'device_type': 'cisco_ios',
+        'host': '172.31.1.110',
+        'username': 'admin',
+        'password': 'cisco'
+    }
+    connection = ConnectHandler(**device)
+    output = connection.send_command(commands)
+    print(output)
 
 
 def main():
